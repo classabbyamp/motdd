@@ -8,7 +8,7 @@ fi
 
 DOMAIN="$(hostname | cut -d '.' -f 2-)"
 
-printf "%s" "$(figlet $(hostname -s))" | sed -e 's/[[:space:]]*$//' | sed '${s/$/.'"${DOMAIN}"'/}' | lolcat -f
+printf "%s" "$(figlet $(hostname | cut -d '.' -f 1))" | sed -e 's/[[:space:]]*$//' | sed '${s/$/.'"${DOMAIN}"'/}' | lolcat -f
 printf "\n"
 
 printf "Welcome to %s (%s).\n" "$DISTRIB_DESCRIPTION" "$(uname -r)"
