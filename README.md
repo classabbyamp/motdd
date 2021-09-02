@@ -2,6 +2,14 @@
 
 My little dynamic motd scripts.
 
+## Requirements
+
+- lolcat
+- figlet
+- curl
+- bash
+- docker
+
 ## Usage
 
 On systems that include `/etc/update-motd.d/`: copy the contents of `update-motd.d/` to that directory.
