@@ -2,6 +2,8 @@
 
 My little dynamic motd scripts.
 
+![an example of the output of the script](./example-output.png)
+
 ## Requirements
 
 - lolcat
