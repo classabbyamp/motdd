@@ -13,14 +13,17 @@ public_ip=$(curl -s ipinfo.io/ip)
 printf "System information as of: \e[0;32m%s\e[0m\n" "$date"
 printf "\n"
 printf "System load:\t\e[0;32m%s\e[0m\t\tSystem uptime:\t\e[0;32m%s\e[0m\n" $load "$time"
-printf "Memory usage:\t\e[0;32m%s\e[0m\t\tPub IP Address:\t\e[0;32m%s\e[0m\n" $memory_usage $public_ip
+printf "Memory usage:\t\e[0;32m%s\e[0m\t\tIP Address:\t\e[0;32m%s\e[0m\n" $memory_usage $public_ip
 printf "Usage on /:\t\e[0;32m%s\e[0m\t\tProcesses:\t\e[0;32m%s\e[0m\n" $root_usage $processes
 printf "\n"
 
-DOCKER_VERSION=$(docker version)
-DOCKER_INFO=$(docker info 2> /dev/null)
+if command -v docker &>/dev/null; then
+    DOCKER_VERSION=$(docker version)
+    DOCKER_INFO=$(docker info 2> /dev/null)
 
-STORAGE_DRIVER=$(echo "$DOCKER_INFO" | grep Storage\ Driver | awk '{print $NF}')
-VERSION=$(echo "$DOCKER_VERSION" | grep Version | head -n 1  | awk '{print $2}')
+    STORAGE_DRIVER=$(echo "$DOCKER_INFO" | grep Storage\ Driver | awk '{print $NF}')
+    VERSION=$(echo "$DOCKER_VERSION" | grep Version | head -n 1  | awk '{print $2}')
 
-echo -e "Docker \e[0;32m$VERSION\e[0m is running using the \e[0;32m'$STORAGE_DRIVER'\e[0m storage driver."
+    echo -e "Docker \e[0;32m$VERSION\e[0m is running using the \e[0;32m'$STORAGE_DRIVER'\e[0m storage driver."
+fi
+
