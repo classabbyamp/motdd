@@ -1,6 +1,6 @@
 #!/bin/sh
 
-RELEASE=1.0.0
+RELEASE=1.0.1
 
 USRDIR="/usr/share/update-motd.d"
 ETCDIR="/etc/update-motd.d"
