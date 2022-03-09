@@ -24,5 +24,5 @@ fi
 
 [ -n "$ANSI_COLOR" ] && OS_NAME="\033[${ANSI_COLOR}m${OS_NAME}\033[m"
 
-figlet "$HOST_PFX" | sed -e 's/[[:space:]]*$//;${s/$/.'"${HOST_DOMAIN}"'/}' | lolcat -f
+printf "%s" "$(figlet $HOST_PFX)" | sed -e 's/[[:space:]]*$//' | sed -e '${s/$/.'"${HOST_DOMAIN}"'/}' | lolcat -f
 env echo -e "\nWelcome to ${OS_NAME} $(uname -r)\n"
