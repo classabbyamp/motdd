@@ -1,6 +1,6 @@
 #!/bin/sh
 
-RELEASE=1.0.0
+RELEASE=1.0.2
 
 USRDIR="/usr/share/update-motd.d"
 ETCDIR="/etc/update-motd.d"
@@ -70,7 +70,7 @@ run() {
 [ -n "$HELP" ] && help
 [ -n "$VERSION" ] && version
 
-[ -n "$DRYRUN" ] || touch $MOTDFILE
+[ -n "$DRYRUN" ] || echo "" > $MOTDFILE
 
 # list all files in USRDIR and ETCDIR
 # sort them to get the unique values in order
