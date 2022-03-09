@@ -1,0 +1,88 @@
+#!/bin/sh
+
+RELEASE=1.0.0
+
+USRDIR="/usr/share/update-motd.d"
+ETCDIR="/etc/update-motd.d"
+MOTDFILE="/etc/motd"
+
+VERBOSE=
+VERSION=
+HELP=
+DRYRUN=
+
+while getopts "vVdh" arg; do
+    case $arg in
+        v) VERBOSE=1 ;;
+        V) VERSION=1 ;;
+        d) DRYRUN=1 ;;
+        h|?) HELP=1 ;;
+    esac
+done
+
+version() {
+    env echo "motdd v${RELEASE}"
+    exit 0
+}
+
+help() {
+    env echo "Usage: update-motd [OPTION]...
+
+update-motd runs scripts to generate a message of the day in ${MOTDFILE}.
+
+Default scripts are stored in ${USRDIR}. User-defined scripts
+are stored in ${ETCDIR}. If a file exists in ${ETCDIR},
+it overrides the file with the same name in ${USRDIR}.
+
+Ensure all scripts executable and have a shebang.
+
+OPTIONS
+ -h	Show this message
+ -V	Show the version of motd
+ -v	Prints more verbose messages to stderr
+ -d	Print to stdout and do not write to ${MOTDFILE}
+
+Copyright (c) 2022 classabbyamp, released under the BSD 3-Clause licence"
+    exit 0
+}
+
+err() {
+    env echo -e "$@" >&2
+}
+
+run() {
+    fn="$1"
+    if [ -f "$fn" ]; then
+        if [ -x "$fn" ]; then
+            [ -n "$VERBOSE" ] && err "Running \"$fn\" ..."
+            [ -n "$DRYRUN" ] && $fn
+            [ -z "$DRYRUN" ] && $fn >> $MOTDFILE
+        else
+            err "Cannot execute \"$fn\""
+        fi
+        ret=0
+    else
+        ret=1
+    fi
+    return "$ret"
+}
+
+[ -n "$HELP" ] && help
+[ -n "$VERSION" ] && version
+
+[ -n "$DRYRUN" ] || touch $MOTDFILE
+
+# list all files in USRDIR and ETCDIR
+# sort them to get the unique values in order
+# for each file:
+#   if it exists in ETCDIR, check if it's executable, then execute it
+#   otherwise, check if it exists and is executable in USRDIR and execute it
+while read -r f; do
+    run "$ETCDIR/$f" || run "$USRDIR/$f"
+done <<EOF
+$(
+sort -u <<SORTEOF
+$(ls -1 $USRDIR; ls -1 $ETCDIR)
+SORTEOF
+)
+EOF

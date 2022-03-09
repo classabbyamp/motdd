@@ -1,0 +1,13 @@
+#!/bin/sh
+if command -v xbps-install >/dev/null; then
+    xbps-install -MSun | awk 'BEGIN { FS=" "; inscount = 0; upcount = 0; rmcount = 0 }
+$2 == "install" { inscount++ }
+$2 == "update" { upcount++ }
+$2 == "remove" { rmcount++ }
+END {
+    total = inscount + upcount + rmcount
+    if (total > 0) {
+        print "\n\033[0;32m" total "\033[0m updates available (\033[0;32m+" inscount " \033[0;34m~" upcount " \033[0;31m-" rmcount "\033[0m)"
+    }
+}'
+fi

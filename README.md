@@ -1,32 +1,37 @@
-# motd
+# motdd
 
-My little dynamic motd scripts.
+A small shell script to manage `/etc/motd`.
 
-![an example of the output of the script](./example-output.png)
+## Usage
 
-## Requirements
+Install `bin/update-motd` somewhere on your `$PATH`.
+
+Create `/etc/update-motd.d/` and put the scripts to generate the MOTD in it. Ensure they are executable.
+If packaging this program, `/usr/share/update-motd.d/` can be used as a fallback path for system defaults.
+
+On systems with runit and [snooze](https://github.com/leahneukirchen/snooze) (like Void Linux), the service in `runit/` can be used.
+Otherwise, a cronjob, systemd timer, or similar method for running `update-motd` periodically works.
+
+See [here](https://github.com/classabbyamp/void-packages/blob/motdd/srcpkgs/motdd/template) for an example package template for motdd.
+
+## Examples
+
+Two examples of scripts are provided:
+
+### Basic
+
+A simple MOTD.
+
+![an example of the output of the basic example scripts](doc/basic-example.png)
+
+### Fancy
+
+A showy MOTD. Requires:
 
 - lolcat
 - figlet
 - curl
-- bash
-- docker
+- docker (optional)
+- xbps (optional)
 
-## Usage
-
-On systems that include `/etc/update-motd.d/`: copy the contents of `update-motd.d/` to that directory.
-
-On other systems:
-
-```
-# cp ./update-motd.sh /usr/local/bin/
-# cp -r ./update-motd.d /usr/local/share/
-# crontab -e
-```
-
-In the crontab, add something like this (this runs every hour at 0 minutes past the hour):
-
-```
-0 * * * * /usr/local/bin/update-motd.sh
-```
-
+![an example of the output of the fancy example scripts](doc/fancy-example.png)

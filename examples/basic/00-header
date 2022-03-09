@@ -1,0 +1,23 @@
+#!/bin/sh
+
+[ -r /etc/hostname ] && HOSTNAME=$(cat /etc/hostname) || HOSTNAME=$(hostname)
+
+[ -r /usr/lib/os-release ] && . /usr/lib/os-release || . /etc/os-release
+
+if [ -n "$PRETTY_NAME" ]; then
+    OS_NAME="$PRETTY_NAME"
+elif [ -n "$NAME" ]; then
+    OS_NAME="$NAME"
+else
+    [ -r /etc/lsb-release ] && . /etc/lsb-release
+
+    if [ -n "$DISTRIB_DESCRIPTION" ]; then
+        OS_NAME="$DISTRIB_DESCRIPTION"
+    elif command -v lsb_release >/dev/null; then
+        OS_NAME=$(lsb_release -s -d)
+    else
+        OS_NAME="Unknown System"
+    fi
+fi
+
+env echo -e "Welcome to ${OS_NAME} $(uname -r) on ${HOSTNAME}"

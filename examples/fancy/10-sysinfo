@@ -1,0 +1,16 @@
+#!/bin/sh
+
+date=$(date)
+load=$(awk '{print $1}' </proc/loadavg)
+root_usage=$(df -h / | awk '/\// {print $(NF-1)}')
+memory_usage=$(free -m | awk '/Mem:/ { total=$2; used=$3 } END { printf("%3.1f%%", used/total*100)}')
+time=$(uptime | grep -ohe 'up .*' | sed 's/,/\ hours/g' | awk '{ printf $2" "$3 }')
+processes=$(ps aux | wc -l)
+public_ip=$(curl -s ipinfo.io/ip)
+
+env echo -e "System information as of: \033[0;32m${date}\033[0m
+
+System load:	\033[0;32m${load}\033[0m		System uptime:	\033[0;32m${time}\033[0m
+Memory usage:	\033[0;32m${memory_usage}\033[0m		IP Address:	\033[0;32m${public_ip}\033[0m
+Usage on /:	\033[0;32m${root_usage}\033[0m		Processes:	\033[0;32m${processes}\033[0m
+"

@@ -1,0 +1,3 @@
+#!/bin/sh
+# update the motd every 10 minutes
+exec snooze -d* -m* -w* -D* -W* -H* -M/10 -S0 update-motd

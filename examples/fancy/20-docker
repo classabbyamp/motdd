@@ -1,0 +1,6 @@
+#!/bin/sh
+if command -v docker >/dev/null; then
+    env echo -e "$(docker info -f 'Running Docker \033[0;32mv{{.ServerVersion}}\033[0m
+ Containers: \033[0;32m{{.Containers}}\033[0m (\033[0;32m{{.ContainersRunning}}\033[0m running, \033[0;32m{{.ContainersPaused}}\033[0m paused, \033[0;32m{{.ContainersStopped}}\033[0m stopped)
+ Images: \033[0;32m{{.Images}}\033[0m')"
+fi
